@@ -1,0 +1,1 @@
+REBEL birthday song edition. Deploy all files to the existing Cloudflare Worker as a new version. Original lyrics and browser-generated practice drum pattern; no prerecorded vocal track. English/Spanish toggle. Test mic permissions on HTTPS.
