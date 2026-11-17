@@ -1,7 +1,11 @@
+
 {
   "name": "bold-rain-cc1a",
   "main": "worker.js",
   "compatibility_date": "2026-11-17",
+  "ai": {
+    "binding": "AI"
+  },
   "assets": {
     "directory": "./",
     "binding": "ASSETS",
