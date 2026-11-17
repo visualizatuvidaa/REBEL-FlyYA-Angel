@@ -1,0 +1,6 @@
+REBEL FlyYA maestro IA
+1. Publica estos archivos en el repositorio GitHub conectado a Cloudflare (incluyendo worker.js y wrangler.jsonc).
+2. En Cloudflare Workers > bold-rain-cc1a > Settings > Variables and Secrets agrega AI_API_KEY como Secret. Es una clave privada de proveedor compatible con OpenAI; NO la pongas en GitHub.
+3. Opcional: AI_MODEL y AI_BASE_URL si usas otro modelo/proveedor compatible.
+4. Confirma que el build despliega worker.js y assets, y prueba FlyYA Coach.
+NOTA: la voz sintetizada es del navegador; el maestro recibe texto/dictado, NO audio crudo. El servicio IA puede tener cargos por uso.
