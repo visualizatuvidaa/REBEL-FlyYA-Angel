@@ -1,4 +1,3 @@
-
 const MODEL = "gpt-4.1-mini";
 
 const json = (data, status = 200) =>
@@ -23,13 +22,28 @@ export default {
         return json({ error: "OpenAI API key not configured" }, 503);
       }
 
+      let body;
       try {
-        const body = await request.json();
-        const message = String(body.message || "").trim();
-        const topic = String(body.topic || "music").slice(0, 80);
+        body = await request.json();
+      } catch {
+        return json({ error: "Invalid JSON body" }, 400);
+      }
+
+      if (!body || typeof body !== "object" || Array.isArray(body) ||
+          typeof body.message !== "string") {
+        return json({ error: "Invalid message" }, 400);
+      }
+
+      const message = body.message.trim();
+      if (!message || message.length > 1200) {
+        return json({ error: "Invalid message" }, 400);
+      }
+
+      try {
+        const topic = (typeof body.topic === "string" ? body.topic : "music").slice(0, 80);
         const history = Array.isArray(body.history)
           ? body.history.slice(-8).filter(m =>
-              ["user", "assistant"].includes(m.role) &&
+              m && ["user", "assistant"].includes(m.role) &&
               typeof m.content === "string"
             ).map(m => ({
               role: m.role,
@@ -37,9 +51,6 @@ export default {
             }))
           : [];
 
-        if (!message || message.length > 1200) {
-          return json({ error: "Invalid message" }, 400);
-        }
 
         const response = await fetch(
           "https://api.openai.com/v1/chat/completions",
@@ -72,8 +83,6 @@ export default {
           }
         );
 
-        const data = await response.json();
-
         if (!response.ok) {
           return json({
             error: "OpenAI request failed",
@@ -81,12 +90,13 @@ export default {
           }, 502);
         }
 
+        const data = await response.json();
         return json({
           reply: data.choices?.[0]?.message?.content ||
             "Please try again."
         });
-      } catch (error) {
-        return json({ error: "Unable to process request" }, 500);
+      } catch {
+        return json({ error: "Coach service unavailable" }, 502);
       }
     }
 
